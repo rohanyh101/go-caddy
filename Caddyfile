@@ -1,9 +1,40 @@
 
-http:// {
-    reverse_proxy go_proxy:8080 
+http://localhost {
+    redir https://localhost{uri} 301
 }
 
-https:// {
-    reverse_proxy go_proxy:8080 
+# reverse proxy
+https://localhost {
+    reverse_proxy go_proxy:8080
+
+    tls {
+        on_demand
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains;"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+    }
 }
 
+# Health check
+http://localhost/health {
+    respond "Server is up and running..." 200 
+}
+
+
+# api routes
+https://localhost/api {
+    reverse_proxy go_proxy:8080
+
+    header {
+        X-Frame-Options "DENY"
+        Content-Security-Policy "default-src 'self'"
+    }
+}
+
+# not found route
+https://localhost/api/* {
+    respond "Not Found" 404
+}
