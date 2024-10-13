@@ -1,0 +1,9 @@
+
+http:// {
+    reverse_proxy go_proxy:8080 
+}
+
+https:// {
+    reverse_proxy go_proxy:8080 
+}
+
