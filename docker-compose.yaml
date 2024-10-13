@@ -1,8 +1,14 @@
 version: '3.7'
 
 services:
-  go_proxy:
+  go_proxy_1:
     build: .
+    ports:
+      - "8081:8080"
+  go_proxy_2:
+    build: .
+    ports:
+      - "8082:8080"
   
   caddy:
     image: caddy
@@ -11,7 +17,8 @@ services:
       - "443:443"
       - "5000:80"
     depends_on:
-      - go_proxy
+      - go_proxy_1
+      - go_proxy_2
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data

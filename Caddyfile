@@ -5,8 +5,15 @@ http://localhost {
 
 # reverse proxy
 https://localhost {
-    reverse_proxy go_proxy:8080
+    reverse_proxy {
+        to go_proxy_1:8080
+        to go_proxy_2:8080
 
+        # load balancing
+        lb_policy round_robin
+    }
+
+    # enable automatic HTTPS
     tls {
         on_demand
     }
@@ -26,7 +33,13 @@ http://localhost/health {
 
 # api routes
 https://localhost/api {
-    reverse_proxy go_proxy:8080
+    reverse_proxy {
+        to go_proxy_1:8080
+        to go_proxy_2:8080
+
+        # load balancing
+        lb_policy round_robin
+    }
 
     header {
         X-Frame-Options "DENY"

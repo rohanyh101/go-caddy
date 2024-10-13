@@ -7,6 +7,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Handled request from %s\n", r.RemoteAddr)
 		w.Write([]byte("HI MOM!\n"))
 	})
 
